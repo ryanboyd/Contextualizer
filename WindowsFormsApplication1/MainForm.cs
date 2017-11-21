@@ -152,7 +152,7 @@ namespace WindowsFormsApplication1
             using (StreamWriter outputFile = new StreamWriter(((string[])e.Argument)[1]))
             {
 
-                string HeaderString = "\"Filename\",\"Observation\",\"Word\",\"Context\"";
+                string HeaderString = "\"Filename\",\"Observation\",\"DictionaryWord\",\"Word\",\"Context\"";
 
                 outputFile.WriteLine(HeaderString);
 
@@ -189,6 +189,7 @@ namespace WindowsFormsApplication1
                     uint NumberOfMatches = 0;
 
                     //splits everything out into words
+                    string DictionaryEntry = "";
                     string[] Words = readText.Trim().Split(' ');
                     Words = Words.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
                         for (int i = 0; i < Words.Length; i++)
@@ -200,6 +201,7 @@ namespace WindowsFormsApplication1
                             if (HashedWords.Contains(Words[i]))
                             {
                                 IsWordMatched = true;
+                                DictionaryEntry = Words[i];
                             }
                             else
                             {
@@ -208,6 +210,7 @@ namespace WindowsFormsApplication1
                                     if (Words[i].StartsWith(WordsWithWildCards[j]))
                                     {
                                         IsWordMatched = true;
+                                        DictionaryEntry = WordsWithWildCards[j] + "*";
                                         break;
                                     }
                                 }
@@ -242,11 +245,12 @@ namespace WindowsFormsApplication1
 
 
                                 //pull together the output
-                                string[] OutputString = new string[] {"", "", "", ""};
+                                string[] OutputString = new string[] {"", "", "", "", ""};
                                 OutputString[0] = "\"" + Filename_Clean + "\"";
                                 OutputString[1] = NumberOfMatches.ToString();
-                                OutputString[2] = "\"" + Words[i] + "\"";
-                                OutputString[3] = "\"" + String.Join(" ", WordsInWindow) + "\"";
+                                OutputString[2] = "\"" + DictionaryEntry + "\"";
+                                OutputString[3] = "\"" + Words[i] + "\"";
+                                OutputString[4] = "\"" + String.Join(" ", WordsInWindow) + "\"";
 
                                 outputFile.WriteLine(String.Join(",", OutputString));
                             }

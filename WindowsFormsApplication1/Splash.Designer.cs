@@ -57,7 +57,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(202, 26);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Contextualizer v0.95b";
+            this.label1.Text = "Contextualizer v0.97b";
             this.label1.UseWaitCursor = true;
             // 
             // label2
