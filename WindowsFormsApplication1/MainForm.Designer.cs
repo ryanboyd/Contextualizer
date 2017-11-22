@@ -137,6 +137,7 @@
             // FunctionWordTextBox
             // 
             this.FunctionWordTextBox.Location = new System.Drawing.Point(25, 61);
+            this.FunctionWordTextBox.MaxLength = 2147483647;
             this.FunctionWordTextBox.Multiline = true;
             this.FunctionWordTextBox.Name = "FunctionWordTextBox";
             this.FunctionWordTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
