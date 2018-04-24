@@ -21,7 +21,7 @@ namespace WindowsFormsApplication1
         {
 
             InitializeComponent();
-            FunctionWordTextBox.Text = Contextualizer.Properties.Resources.function_word_list.ToString();
+            WordListTextBox.Text = Contextualizer.Properties.Resources.function_word_list.ToString();
 
             foreach(var encoding in Encoding.GetEncodings())
             {
@@ -41,7 +41,7 @@ namespace WindowsFormsApplication1
         private void button1_Click(object sender, EventArgs e)
         {
 
-            if (Convert.ToUInt32(WordWindowSizeTextbox.Text) < 1)
+            if (Convert.ToUInt32(WordWindowLeftTextbox.Text) < 1)
             {
                 MessageBox.Show("Word Window Size must be >= 1.", "Problem with settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -59,19 +59,28 @@ namespace WindowsFormsApplication1
                 saveFileDialog.FileName = "Contextualizer.csv";
 
                 saveFileDialog.InitialDirectory = TextFileFolder;
-                saveFileDialog.ShowDialog();
+                if (saveFileDialog.ShowDialog() != DialogResult.Cancel) { 
 
                 
                 string OutputFileLocation = saveFileDialog.FileName;
 
-                if (OutputFileLocation != "") { 
-                    button1.Enabled = false;
-                    WordWindowSizeTextbox.Enabled = false;
-                    FunctionWordTextBox.Enabled = false;
-                    ScanSubfolderCheckbox.Enabled = false;
-                    PunctuationBox.Enabled = false;
-                    EncodingDropdown.Enabled = false;
-                    BgWorker.RunWorkerAsync(new string[] {TextFileFolder, OutputFileLocation});
+                    if (OutputFileLocation != "") { 
+
+                        while(WordListTextBox.Text.Contains("  "))
+                        {
+                            WordListTextBox.Text = WordListTextBox.Text.Replace("  ", " ");
+                        }
+
+                        button1.Enabled = false;
+                        WordWindowLeftTextbox.Enabled = false;
+                        WordWindowRightTextbox.Enabled = false;
+                        WordListTextBox.Enabled = false;
+                        ScanSubfolderCheckbox.Enabled = false;
+                        PunctuationBox.Enabled = false;
+                        EncodingDropdown.Enabled = false;
+                        CaseSensitiveCheckbox.Enabled = false;
+                        BgWorker.RunWorkerAsync(new string[] {TextFileFolder, OutputFileLocation});
+                    }
                 }
             } 
 
@@ -85,7 +94,9 @@ namespace WindowsFormsApplication1
         private void BgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
 
-            int WordWindowSize = 2;
+            int WordWindowLeft = 2;
+            int WordWindowRight = 2;
+            bool CaseSensitive = false;
 
             
             //set up our sentence boundary detection
@@ -96,23 +107,43 @@ namespace WindowsFormsApplication1
             this.Invoke((MethodInvoker)delegate ()
             {
                 SelectedEncoding = Encoding.GetEncoding(EncodingDropdown.SelectedItem.ToString());
-                WordWindowSize = Convert.ToInt32(WordWindowSizeTextbox.Text);
+                WordWindowLeft = Convert.ToInt32(WordWindowLeftTextbox.Text);
+                WordWindowRight = Convert.ToInt32(WordWindowRightTextbox.Text);
+
+                CaseSensitive = CaseSensitiveCheckbox.Checked;
+
             });
 
-            if (WordWindowSize < 1) WordWindowSize = 1;
+            //if (WordWindowSize < 1) WordWindowSize = 1;
 
 
 
             //the very first thing that we want to do is set up our function word lists
             List<string> WordWildcardList = new List<string>();
             List<string> WordsToHash = new List<string>();
-            
-            string[] OriginalFunctionWordList = NewlineClean.Split(FunctionWordTextBox.Text.ToLower());
-            OriginalFunctionWordList = OriginalFunctionWordList.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 
-            foreach(string Word in OriginalFunctionWordList)
+            string[] OriginalWordList;
+
+            if (CaseSensitive)
+            {
+                OriginalWordList = NewlineClean.Split(WordListTextBox.Text);
+            }
+            else
+            {
+                OriginalWordList = NewlineClean.Split(WordListTextBox.Text.ToLower());
+            }
+
+            OriginalWordList = OriginalWordList.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+
+            int MaxWords = 1;
+
+            foreach(string Word in OriginalWordList)
             {
                 string WordToParse = Word.Trim();
+
+                int numwords = WordToParse.Split().Length;
+
+                if (numwords > MaxWords) MaxWords = numwords;
 
                 if (WordToParse.Contains('*'))
                 {
@@ -148,11 +179,11 @@ namespace WindowsFormsApplication1
 
 
 
-            try { 
+            //try { 
             using (StreamWriter outputFile = new StreamWriter(((string[])e.Argument)[1]))
             {
 
-                string HeaderString = "\"Filename\",\"Observation\",\"DictionaryWord\",\"Word\",\"Context\"";
+                string HeaderString = "\"Filename\",\"Observation\",\"DictionaryWord\",\"ContextLeft\",\"Match\",\"ContextRight\"";
 
                 outputFile.WriteLine(HeaderString);
 
@@ -171,10 +202,19 @@ namespace WindowsFormsApplication1
                     });
 
 
-                                            
+
 
                     //do stuff here
-                    string readText = File.ReadAllText(fileName, SelectedEncoding).ToLower();
+                    string readText;
+                    if (CaseSensitive)
+                    {
+                        readText = File.ReadAllText(fileName, SelectedEncoding);
+                    }
+                    else
+                    {
+                        readText = File.ReadAllText(fileName, SelectedEncoding).ToLower();
+                    }
+                        
 
 
                     readText = NewlineClean.Replace(readText, " ");
@@ -191,29 +231,65 @@ namespace WindowsFormsApplication1
                     //splits everything out into words
                     string DictionaryEntry = "";
                     string[] Words = readText.Trim().Split(' ');
+
+                    
+
                     Words = Words.Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-                        for (int i = 0; i < Words.Length; i++)
+                    int TotalStringLength = Words.Length;
+
+                    for (int i = 0; i < TotalStringLength; i++)
                         {
 
-                            bool IsWordMatched = false;
 
-                            //this is where all of your magic is going to happen
-                            if (HashedWords.Contains(Words[i]))
+                            bool IsWordMatched = false;
+                            int NumWordsInMatchedString = 0;
+                            string WordToMatch = "";
+
+                            for (int NumWords = MaxWords; NumWords > 0; NumWords--)
                             {
-                                IsWordMatched = true;
-                                DictionaryEntry = Words[i];
-                            }
-                            else
-                            {
-                                for (int j = 0; j < WildCardWordListLength; j++)
+
+                                //here, we go in and construct n-grams up to the length of the 
+                                //largest word phrase in the user-supplied list
+
+                                if (i + NumWords > TotalStringLength) continue;
+                                
+
+                                string[] SubArray = new string[NumWords];
+                                Array.Copy(Words, i, SubArray, 0, NumWords);
+
+                              
+
+
+                                WordToMatch = string.Join(" ", SubArray);
+
+
+                                
+
+                                //this is where all of your magic is going to happen
+                                if (HashedWords.Contains(WordToMatch))
                                 {
-                                    if (Words[i].StartsWith(WordsWithWildCards[j]))
-                                    {
-                                        IsWordMatched = true;
-                                        DictionaryEntry = WordsWithWildCards[j] + "*";
-                                        break;
-                                    }
+                                    IsWordMatched = true;
+                                    DictionaryEntry = WordToMatch;
+                                    NumWordsInMatchedString = NumWords;
                                 }
+                                else
+                                {
+                                    for (int j = 0; j < WildCardWordListLength; j++)
+                                    {
+                                        if (WordToMatch.StartsWith(WordsWithWildCards[j]))
+                                        {
+                                            IsWordMatched = true;
+                                            DictionaryEntry = WordsWithWildCards[j] + "*";
+                                            NumWordsInMatchedString = NumWords;
+                                            break;
+                                        }
+                                    }
+
+                                }
+
+                                //if we found the word / phrase, we'll break out of this internal n-gram loop
+                                if (IsWordMatched) break;
+
 
                             }
 
@@ -224,35 +300,44 @@ namespace WindowsFormsApplication1
 
                                 //create a new array that will contain the word window
                                 //string[] WordsInWindow = new string[1 + (WordWindowSize * 2)];
-                                int SkipAmount = i - WordWindowSize;
-                                int TakeAmount = (WordWindowSize * 2) + 1;
+                                int SkipPositionLeft = i - WordWindowLeft;
+                                int SkipPositionRight = i + 1 + (NumWordsInMatchedString - 1);
 
-                                if (SkipAmount < 0)
+                                int TakeLeft = WordWindowLeft;
+                                int TakeRight = WordWindowRight;
+                                
+
+                            if (SkipPositionLeft < 0)
                                 {
-                                    TakeAmount += SkipAmount;
-                                    SkipAmount = 0;
+
+                                    TakeLeft = i;
+                                    SkipPositionLeft = 0;
+                                    
                                 }
 
-                                if (i + WordWindowSize >= Words.Length)
+                                if (SkipPositionRight + TakeRight >= TotalStringLength)
                                 {
-                                    TakeAmount = Words.Length - SkipAmount;
+                                    TakeRight = (SkipPositionRight + TakeRight) - TotalStringLength;
                                 }
 
 
                                 
-                                var WordsInWindow = Words.Skip(SkipAmount).Take(TakeAmount).ToArray();
+                                var ContextLeft = Words.Skip(SkipPositionLeft).Take(TakeLeft).ToArray();
+                                var ContextRight = Words.Skip(SkipPositionRight).Take(TakeRight).ToArray();
 
 
 
-                                //pull together the output
-                                string[] OutputString = new string[] {"", "", "", "", ""};
+                            //pull together the output
+                            string[] OutputString = new string[] {"", "", "", "", "", ""};
                                 OutputString[0] = "\"" + Filename_Clean + "\"";
                                 OutputString[1] = NumberOfMatches.ToString();
                                 OutputString[2] = "\"" + DictionaryEntry + "\"";
-                                OutputString[3] = "\"" + Words[i] + "\"";
-                                OutputString[4] = "\"" + String.Join(" ", WordsInWindow) + "\"";
+                                OutputString[3] = "\"" + String.Join(" ", ContextLeft).Replace("\"", "\"\"") + "\"";
+                                OutputString[4] = "\"" + WordToMatch + "\"";
+                                OutputString[5] = "\"" + String.Join(" ", ContextRight).Replace("\"", "\"\"") + "\"";
 
-                                outputFile.WriteLine(String.Join(",", OutputString));
+
+                            outputFile.WriteLine(String.Join(",", OutputString));
                             }
                             
 
@@ -266,11 +351,11 @@ namespace WindowsFormsApplication1
 
             }
 
-            }
-            catch
-            {
-                MessageBox.Show("Contextualizer could not open your output file\r\nfor writing. Is the file open in another application?");
-            }
+            //}
+            //catch
+            //{
+            //    MessageBox.Show("Contextualizer could not open your output file\r\nfor writing. Is the file open in another application?");
+           // }
 
 
 
@@ -280,11 +365,13 @@ namespace WindowsFormsApplication1
         private void BgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             button1.Enabled = true;
-            WordWindowSizeTextbox.Enabled = true;
-            FunctionWordTextBox.Enabled = true;
+            WordWindowLeftTextbox.Enabled = true;
+            WordWindowRightTextbox.Enabled = true;
+            WordListTextBox.Enabled = true;
             ScanSubfolderCheckbox.Enabled = true;
             PunctuationBox.Enabled = true;
             EncodingDropdown.Enabled = true;
+            CaseSensitiveCheckbox.Enabled = true;
             FilenameLabel.Text = "Finished!";
             MessageBox.Show("Contextualizer has finished analyzing your texts.", "Analysis Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -294,15 +381,6 @@ namespace WindowsFormsApplication1
             e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
         }
 
-        private void PhraseLengthTextbox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
-        }
-
-        private void BigWordTextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
-        }
 
 
     }

@@ -83,18 +83,13 @@
         "InstallerBootstrapper" = "3:2"
             "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
             {
-            "Enabled" = "11:TRUE"
+            "Enabled" = "11:FALSE"
             "PromptEnabled" = "11:TRUE"
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
-                    {
-                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.5"
-                    }
                 }
             }
         }
@@ -118,7 +113,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.6.2"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.7.1"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=395269"
                 }
@@ -233,15 +228,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Contextualizer"
-        "ProductCode" = "8:{1DB32245-5C3C-483F-9798-157E20FB131A}"
-        "PackageCode" = "8:{1DD17AF4-B47C-4693-ABEB-314B9E2D48D0}"
+        "ProductCode" = "8:{3AB35871-3906-4A1B-9812-26571A5FCEDB}"
+        "PackageCode" = "8:{ECD4B8B9-EF44-4AC5-8C61-BC0280668FDE}"
         "UpgradeCode" = "8:{1544E006-D451-477C-8DBA-EC6EE9138083}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.97.0"
+        "ProductVersion" = "8:1.04"
         "Manufacturer" = "8:Ryan L. Boyd, Ph.D."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

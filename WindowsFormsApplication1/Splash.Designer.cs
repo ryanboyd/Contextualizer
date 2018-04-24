@@ -53,18 +53,18 @@
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.CornflowerBlue;
             this.label1.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(51, 234);
+            this.label1.Location = new System.Drawing.Point(54, 234);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(202, 26);
+            this.label1.Size = new System.Drawing.Size(191, 26);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Contextualizer v0.97b";
+            this.label1.Text = "Contextualizer v1.04";
             this.label1.UseWaitCursor = true;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Calibri", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(90, 276);
+            this.label2.Location = new System.Drawing.Point(93, 269);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(126, 15);
             this.label2.TabIndex = 2;
