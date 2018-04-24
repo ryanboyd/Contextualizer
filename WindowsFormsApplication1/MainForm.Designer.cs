@@ -149,9 +149,10 @@
             this.WordListTextBox.MaxLength = 2147483647;
             this.WordListTextBox.Multiline = true;
             this.WordListTextBox.Name = "WordListTextBox";
-            this.WordListTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.WordListTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.WordListTextBox.Size = new System.Drawing.Size(213, 283);
             this.WordListTextBox.TabIndex = 7;
+            this.WordListTextBox.WordWrap = false;
             // 
             // label3
             // 
