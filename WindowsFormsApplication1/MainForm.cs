@@ -174,7 +174,7 @@ namespace WindowsFormsApplication1
 
 
 
-            //try { 
+            try { 
             using (StreamWriter outputFile = new StreamWriter(((string[])e.Argument)[1]))
             {
 
@@ -271,8 +271,9 @@ namespace WindowsFormsApplication1
                                 {
                                     for (int j = 0; j < WildCardWordListLength; j++)
                                     {
-                                        if (WordToMatch.StartsWith(WordsWithWildCards[j]))
+                                        if (WordsWithWildCards[j].Split().Length == NumWords & WordToMatch.StartsWith(WordsWithWildCards[j]))
                                         {
+                                            
                                             IsWordMatched = true;
                                             DictionaryEntry = WordsWithWildCards[j] + "*";
                                             NumWordsInMatchedString = NumWords;
@@ -346,11 +347,11 @@ namespace WindowsFormsApplication1
 
             }
 
-            //}
-            //catch
-            //{
-            //    MessageBox.Show("Contextualizer could not open your output file\r\nfor writing. Is the file open in another application?");
-           // }
+            }
+            catch
+            {
+                MessageBox.Show("Contextualizer encountered an issue somewhere while trying to analyze your texts. The most common cause of this is trying to open your output file while Contextualizer is still running. Did any of your input files move, or is your output file being opened/modified by another application?");
+           }
 
 
 
