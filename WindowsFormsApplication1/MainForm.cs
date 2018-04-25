@@ -41,11 +41,7 @@ namespace WindowsFormsApplication1
         private void button1_Click(object sender, EventArgs e)
         {
 
-            if (Convert.ToUInt32(WordWindowLeftTextbox.Text) < 1)
-            {
-                MessageBox.Show("Word Window Size must be >= 1.", "Problem with settings", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+
 
 
 
@@ -114,7 +110,6 @@ namespace WindowsFormsApplication1
 
             });
 
-            //if (WordWindowSize < 1) WordWindowSize = 1;
 
 
 
