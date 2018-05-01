@@ -21,7 +21,7 @@ namespace WindowsFormsApplication1
         {
 
             InitializeComponent();
-            WordListTextBox.Text = Contextualizer.Properties.Resources.function_word_list.ToString();
+            WordListTextBox.Text = Contextualizer.Properties.Resources.initial_word_list.ToString();
 
             foreach(var encoding in Encoding.GetEncodings())
             {

@@ -116,11 +116,9 @@
   <ItemGroup>
     <Content Include="1494705113_media-repeat-alt.ico" />
     <Content Include="context.ico" />
+    <None Include="Resources\initial_word_list.txt" />
     <None Include="Resources\context.ico" />
     <None Include="Resources\context.png" />
-    <None Include="Resources\SplashImage.bmp" />
-    <None Include="Resources\repeating.jpg" />
-    <None Include="Resources\function_word_list.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

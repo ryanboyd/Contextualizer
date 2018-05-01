@@ -81,66 +81,14 @@ namespace Contextualizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to about
-        ///absolutely
-        ///actually
-        ///again
-        ///almost
-        ///already
-        ///also
-        ///anyway*
-        ///anywhere
-        ///apparently
-        ///around
-        ///awhile
-        ///back
-        ///barely
-        ///basically
-        ///beyond
-        ///briefly
-        ///clearly
-        ///commonly
-        ///completely
-        ///constantly
-        ///continually
-        ///definitely
-        ///especially
-        ///essentially
-        ///even
-        ///eventually
-        ///ever
-        ///everywhere*
-        ///exclusively
-        ///extremely
-        ///finally
-        ///fortunately
-        ///frequently
-        ///fully
-        ///generally
-        ///hardly
-        ///hence
-        ///henceforth
-        ///here
-        ///here&apos;s
-        ///herein
-        ///heres
-        ///hereto*
-        ///hopefully
-        ///how
-        ///how&apos;d
-        ///how&apos;re
-        ///how&apos;s
-        ///howd
-        ///however
-        ///howre
-        ///hows
-        ///immediately
-        ///indeed
-        ///instea [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to good
+        ///wonderful*
+        ///bad
+        ///awful*.
         /// </summary>
-        internal static string function_word_list {
+        internal static string initial_word_list {
             get {
-                return ResourceManager.GetString("function_word_list", resourceCulture);
+                return ResourceManager.GetString("initial_word_list", resourceCulture);
             }
         }
     }

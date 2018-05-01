@@ -124,7 +124,7 @@
   <data name="context1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\context.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="function_word_list" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\function_word_list.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="initial_word_list" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\initial_word_list.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
