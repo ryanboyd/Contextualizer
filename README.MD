@@ -1,1 +1,1 @@
-Provides context for token words. Download binary installer at http://context.ryanb.cc
+This software is designed to let you extract the words that surround your selected keywords or phrases. For example, if you want to explore words that occur around “positive emotion” words (e.g., happy, terrific, wonderful), this software will make the process super easy. Essentially, it's a Keyword In Context (KWIC) application.
